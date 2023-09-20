@@ -269,8 +269,8 @@
 					// Update your data property with the fetched URLs
 					// console.log(userUrls)
 					this.userUrls = userUrls.map((data) => ({
-						code: data[1],
-						url: data[0],
+						code: data.code,
+						url: data.url,
 					}))
 				} catch (error) {
 					console.error("Failed to load user URLs:", error)
