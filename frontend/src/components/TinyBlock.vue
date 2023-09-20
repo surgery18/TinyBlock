@@ -48,10 +48,11 @@
 						@keyup.enter="submitUrl"
 					/>
 					<button
-						class="btn btn-success ms-2"
+						class="btn btn-success"
 						@click="submitUrl"
-						:disabled="!isValidUrl"
+						:disabled="!isValidUrl || isLoading"
 					>
+						<span v-if="isLoading"><i class="bi bi-arrow-repeat"></i></span>
 						Shorten
 					</button>
 				</div>
@@ -197,6 +198,7 @@
 				contract: null,
 				contractAddress: "",
 				onWrongNetwork: false,
+				isLoading: false,
 			}
 		},
 		async created() {
@@ -371,6 +373,7 @@
 				this.addHttpsPrefix() // Add "https://" prefix if not present
 				this.validateUrl() // Validate the URL when submitting
 				if (this.isValidUrl) {
+					this.isLoading = true
 					try {
 						const receipt = await this.contract.methods
 							.add(this.url)
@@ -397,6 +400,7 @@
 						console.error("Failed to add URL:", error)
 						this.$refs.toast.show(error.message, "error")
 					}
+					this.isLoading = false
 				} else {
 					this.isUrlTouched = true // Mark the URL input as "touched" to show validation errors
 				}
@@ -406,6 +410,20 @@
 </script>
 
 <style scoped lang="less">
+	@keyframes spin {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
+	.btn-success span > .bi-arrow-repeat {
+		display: inline-block; /* To ensure transform applies correctly */
+		animation: spin 1s linear infinite;
+	}
+
 	@keyframes shake {
 		0%,
 		100% {

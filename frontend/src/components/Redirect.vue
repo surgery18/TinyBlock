@@ -42,17 +42,17 @@
 				const response = await contract.methods
 					.getUrlFromCode(this.$route.params.match[0])
 					.call()
-				if (response.url) {
+				if (response.url && response.code === this.$route.params.match[0]) {
 					window.location.href = response.url
 				} else {
 					alert("Short code does not exist")
-					return { path: "/" }
+					return this.$router.push({ path: "/" })
 				}
 			} catch (e) {
 				console.log(e)
 				//give alert and then homepage
 				alert(e.message)
-				return { path: "/" }
+				return this.$router.push({ path: "/" })
 			}
 		},
 	}
