@@ -288,9 +288,9 @@
 				}
 			},
 			async initializeWeb3() {
-				this.web3 = new Web3(Web3.givenProvider)
+				this.web3 = new Web3(Web3.givenProvider ?? Chain.getRpcUrl())
 				if (!window.ethereum && !window.web3) {
-					alert("You have to install MetaMask!")
+					// alert("You have to install MetaMask!")
 					return
 				}
 				window.ethereum.on("chainChanged", (chainId) => {
